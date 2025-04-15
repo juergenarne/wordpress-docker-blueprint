@@ -2,7 +2,7 @@ services:
   web:
     image: php:8.4-apache
     build: .
-    container_name: php-apache
+    container_name: ${APP_NAME}-apache
     volumes:
       - ./${APACHE_HTDOCS}:/var/www/html
       - ./config/php.ini:/usr/local/etc/php/php.ini
@@ -20,7 +20,7 @@ services:
 
   db:
     image: mariadb:${MARIADB_VERSION}
-    container_name: mariadb
+    container_name: ${APP_NAME}-mariadb
     environment:
           MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
           MYSQL_DATABASE: ${MYSQL_DATABASE}

@@ -11,11 +11,12 @@ RUN apt-get update && apt-get install -y \
     imagemagick \
     unzip \
     git \
+    mariadb-client \
     --no-install-recommends \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-configure intl \
     && docker-php-ext-install gd mysqli zip intl exif \
-    && pecl install imagick \
+    && if ! pecl list | grep imagick; then pecl install imagick; fi \
     && docker-php-ext-enable imagick \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

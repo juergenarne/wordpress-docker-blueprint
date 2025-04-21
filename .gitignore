@@ -1,2 +1,5 @@
 .DS_Store
+mariadb/data/lib
 mariadb/data/lib/*
+/mariadb/data/lib/aria_log_control
+/mariadb/data/lib/aria_log.00000001

@@ -22,3 +22,6 @@ RUN apt-get update && apt-get install -y \
 
 # Enable Apache mod_rewrite for WordPress permalinks
 RUN a2enmod rewrite
+
+# Install PhpRedis extension
+RUN pecl install redis && docker-php-ext-enable redis

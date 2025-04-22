@@ -82,7 +82,11 @@ $table_prefix = 'wpx_';
 define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
-
+define( 'WP_REDIS_HOST', 'develop-redis' ); // Container-Name
+define( 'WP_REDIS_PORT', 6379 );
+define( 'WP_REDIS_TIMEOUT', 1 );
+define( 'WP_REDIS_READ_TIMEOUT', 1 );
+define( 'WP_REDIS_DATABASE', 0 );
 
 define( 'WP_ALLOW_MULTISITE', true );
 /* That's all, stop editing! Happy publishing. */

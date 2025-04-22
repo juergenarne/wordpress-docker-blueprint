@@ -24,4 +24,4 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Install PhpRedis extension
-RUN pecl install redis && docker-php-ext-enable redis
+RUN if ! php -m | grep -i redis; then pecl install redis && docker-php-ext-enable redis; fi

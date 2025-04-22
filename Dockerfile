@@ -25,3 +25,8 @@ RUN a2enmod rewrite
 
 # Install PhpRedis extension
 RUN if ! php -m | grep -i redis; then pecl install redis && docker-php-ext-enable redis; fi
+
+# Install WP-CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp

@@ -1,5 +1,11 @@
 FROM php:8.4-apache
 
+# Install sendmail & andere nützliche Tools
+RUN apt-get update && \
+    apt-get install -y sendmail sendmail-bin && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install required system packages and PHP extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev \

@@ -10,6 +10,12 @@ git clone https://juergenarne@github.com/juergenarne/wordpress-blueprint.git .
 
 Modify stuff from the .env file to meet your needs.
 
+To generate WordPress keys execute
+
+```bash
+./generate-wp-keys.sh
+```
+
 **Run:**
 
 ```bash

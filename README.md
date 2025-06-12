@@ -27,4 +27,9 @@ docker-compose build
 docker-compose up -d
 ````
 
+After all containers are created
+```bash
+sudo chmod -R 0775 mariadb/
+````
+
 **Open:** `http://localhost:8080/` and start installing WordPress.

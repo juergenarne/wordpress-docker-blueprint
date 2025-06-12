@@ -20,16 +20,20 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'webdev' );
+// define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', getenv('WORDPRESS_DB_NAME') ?: 'wordpress' );
 
 /** Database username */
-define( 'DB_USER', 'webdevuser' );
+// define( 'DB_USER', 'wordpress' );
+define( 'DB_USER', getenv('WORDPRESS_DB_USER') ?: 'wordpress' );
 
 /** Database password */
-define( 'DB_PASSWORD', 'W3bd3vP4ssw0rd' );
+// define( 'DB_PASSWORD', 'password' );
+define( 'DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD') ?: 'password' );
 
 /** Database hostname */
-define( 'DB_HOST', 'db:3306' );
+// define( 'DB_HOST', 'db:3306' );
+define( 'DB_HOST', getenv('WORDPRESS_DB_HOST') ?: 'db:3306' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -48,14 +52,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define( 'AUTH_KEY',         'r|:wU`XQ[=|zZ(L~4UlG+O<csxB>/.fuKa:gS-2ae/kA<X7kznjV6.JY0R%Z!kVp' );
+define( 'SECURE_AUTH_KEY',  'eh@dFL_G5dYTeKoz9Y%-:lFM6]Uq1PzmHOnJQa6;FbU;D{uU&Qh$D3I_^&R0rkso' );
+define( 'LOGGED_IN_KEY',    'zC1e.F&YznO@W2H|KzNx>=o.C5-`9HcXMvX2APkPL1~QMWs|{k~*PqzN8BI5%`$&T' );
+define( 'NONCE_KEY',        'M&V(dW2G~A!y$S]zKbxW`|T!Hw;A4K^X7n3NxR!aQ^A,F(=Tq?5Z$.y7!XHG>#P7' );
+define( 'AUTH_SALT',        'P#Q_N&t}9.{?StfZ1<Q}4(J!7;Jf5+q2Qx7bRsm>DBXEe+t?oeMW&-5tUPN8{,Xo' );
+define( 'SECURE_AUTH_SALT', 'KrXjM8%jXH3zKc`Nb<@Za$|Xr=sE8AhNE`mYGeW#U)#qvAGL<d9KEZ3:bJ8rWvLD' );
+define( 'LOGGED_IN_SALT',   'L|Z$Q6+wBoZ6+@xf3_Hq(3iPY)VhEVS2b@t^F@Swb?U4Z^;eCw6:AHne}Wm7T%(_' );
+define( 'NONCE_SALT',       '8n_?AM)fXt&mvU|h`3TW{GtSEf|4AHc[;@#M^mT-2zktE|Fy^Kmbnd+YGJ.AHpmQ' );
 
 /**#@-*/
 
@@ -65,7 +69,7 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = 'wpx_';
+$table_prefix = 'wpy_';
 
 /**
  * For developers: WordPress debugging mode.
@@ -82,8 +86,8 @@ $table_prefix = 'wpx_';
 define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
-define( 'WP_REDIS_HOST', 'develop-redis' ); // Container-Name
-define( 'WP_REDIS_PORT', 6379 );
+define( 'WP_REDIS_HOST', (getenv('WORDPRESS_APP_NAME') ?: 'wordpress') . '-redis' ); // Container-Name
+define( 'WP_REDIS_PORT', getenv('WORDPRESS_REDIS_PORT') ?: '6379' );
 define( 'WP_REDIS_TIMEOUT', 1 );
 define( 'WP_REDIS_READ_TIMEOUT', 1 );
 define( 'WP_REDIS_DATABASE', 0 );

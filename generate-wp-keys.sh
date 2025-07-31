@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Platzhalter-Namen in der richtigen Reihenfolge
 KEY_NAMES=(
   AUTH_KEY
   SECURE_AUTH_KEY
@@ -12,13 +11,11 @@ KEY_NAMES=(
   NONCE_SALT
 )
 
-# Funktion zur Generierung eines 36-stelligen zufälligen Strings
 generate_key() {
-  tr -dc 'A-Za-z0-9' </dev/urandom | head -c 36
+  LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 36
 }
 
-# Schleife über alle Schlüssel und Ausgabe im define-Format
 for KEY in "${KEY_NAMES[@]}"; do
   VALUE=$(generate_key)
-  echo "define( '$KEY',  '$VALUE' );"
+  echo "define( '$KEY', '$VALUE' );"
 done

@@ -9,7 +9,7 @@ namespace Rhubarb\RedisCache;
 
 use Exception;
 
-defined( '\\ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || exit;
 
 class Predis {
     /**
@@ -66,8 +66,16 @@ class Predis {
             }
         }
 
-        if ( isset( $parameters['password'] ) && $parameters['password'] === '' ) {
-            unset( $parameters['password'] );
+        if ( array_key_exists( 'password', $parameters ) ) {
+            $password = $parameters['password'];
+
+            $is_empty = is_array( $password )
+                ? $password === []
+                : ! is_scalar( $password ) || (string) $password === '';
+
+            if ( $is_empty ) {
+                unset( $parameters['password'] );
+            }
         }
 
         if ( defined( 'WP_REDIS_SHARDS' ) ) {
@@ -125,7 +133,11 @@ class Predis {
         }
 
         if ( defined( 'WP_REDIS_SSL_CONTEXT' ) && ! empty( WP_REDIS_SSL_CONTEXT ) ) {
-            $parameters['ssl'] = WP_REDIS_SSL_CONTEXT;
+            if ( $servers ) {
+                $options['parameters']['ssl'] = WP_REDIS_SSL_CONTEXT;
+            } else {
+                $parameters['ssl'] = WP_REDIS_SSL_CONTEXT;
+            }
         }
 
         $this->redis = new \Predis\Client( $servers ?: $parameters, $options );
@@ -206,6 +218,7 @@ class Predis {
         $cluster = array_values( WP_REDIS_CLUSTER );
 
         foreach ( $cluster as $key => $server ) {
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
             $components = parse_url( $server );
 
             if ( ! empty( $components['scheme'] ) ) {

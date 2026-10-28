@@ -1,35 +1,57 @@
 # WordPress blueprint
 
-**Download:**
+WordPress 7.1 on PHP 8.5 (Apache), MariaDB and Redis with Docker Compose.
+
+## Server installation (Ubuntu)
+
+**Requirements:** Docker with the Compose plugin (`docker compose`), nginx, certbot, rsync.
 
 ```bash
-git clone https://juergenarne@github.com/juergenarne/wordpress-blueprint.git wordpress
+sudo git clone https://github.com/juergenarne/wordpress-docker-blueprint.git /opt/wordpress/blueprint
+cd /opt/wordpress/blueprint
+sudo ./init.sh
 ```
 
-**Tweak:**
-_(optional)_ 
+`init.sh` asks for the domain, the WordPress admin and (optionally) SMTP access, then:
 
-__The package has been set up to work out of the box for development and testing purpouses. If you wish to use the package for production please modifiy database credentials and secrets for secutiry reasons.__ 
+- copies the Docker project to `/opt/wordpress/<domain>` (owned by root) and creates its `.env`
+  with random database passwords, WordPress keys and salts, table prefix and free local ports
+- copies WordPress to `/var/www/htdocs/<domain>` (owned by www-data)
+- creates `msmtprc` for outgoing mail
+- builds and starts the containers and installs WordPress via WP-CLI
+  (language, timezone, permalinks, Redis object cache)
+- writes the nginx relay config to `/opt/wordpress/<domain>/nginx/<domain>.conf`
 
-Modify stuff from the .env file to meet your needs.
-Kepp in mind to update the wp-config.php file if database credentials where modified.
-
-To generate WordPress keys execute
+The admin password is shown once at the end. Then enable the site and get a certificate:
 
 ```bash
-./generate-wp-keys.sh
+cp /opt/wordpress/<domain>/nginx/<domain>.conf /etc/nginx/sites-available/
+ln -s /etc/nginx/sites-available/<domain>.conf /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
+certbot --nginx -d <domain>
 ```
 
-**Run:**
+Run `init.sh` again from the blueprint for every further domain.
+
+Apache and MariaDB are bound to `127.0.0.1` only; Redis is not published at all. To reach the
+database from outside, open an SSH tunnel (`MYSQL_PORT` from `/opt/wordpress/<domain>/.env`):
 
 ```bash
-docker-compose build
-docker-compose up -d
-````
+ssh -L 3306:127.0.0.1:<MYSQL_PORT> user@server
+```
 
-After all containers are created
+Then connect your database client to `127.0.0.1:3306`.
+
+## Local development
+
 ```bash
-sudo chmod -R 0775 mariadb/
-````
+cp .env.dist .env
+cp msmtprc.dist msmtprc
+./generate-wp-keys.sh   # paste the output into .env
+docker compose build
+docker compose up -d
+```
 
 **Open:** `http://localhost:8080/` and start installing WordPress.
+
+Database credentials, keys and salts are read from `.env`; `wp-config.php` contains no secrets.

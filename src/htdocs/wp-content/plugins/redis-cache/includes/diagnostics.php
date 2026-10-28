@@ -5,7 +5,7 @@
  * @package Rhubarb\RedisCache
  */
 
-defined( '\\ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || exit;
 
 global $wp_object_cache;
 
@@ -24,7 +24,7 @@ $info['Drop-in'] = $roc->object_cache_dropin_exists()
 
 $info['Disabled'] = $disabled ? 'Yes' : 'No';
 
-if ( $dropin && ! $disabled ) {
+if ( $dropin && ! $disabled && class_exists('WP_Object_Cache') ) {
     $info[ 'Ping' ] = $wp_object_cache->diagnostics['ping'] ?? false;
 
     try {
@@ -46,10 +46,6 @@ if ( defined( 'PHP_VERSION' ) ) {
     $info['PHP Version'] = PHP_VERSION;
 }
 
-if ( defined( 'HHVM_VERSION' ) ) {
-    $info['HHVM Version'] = HHVM_VERSION;
-}
-
 $info['Plugin Version'] = WP_REDIS_VERSION;
 $info['Redis Version'] = $roc->get_redis_version() ?: 'Unknown';
 
@@ -66,6 +62,7 @@ if ( $dropin && ! $disabled ) {
     $info['Timeout'] = $wp_object_cache->diagnostics['timeout'] ?? false;
     $info['Read Timeout'] = $wp_object_cache->diagnostics['read_timeout'] ?? false;
     $info['Retry Interval'] = $wp_object_cache->diagnostics['retry_interval'] ?? false;
+    $info['Persistent'] = $wp_object_cache->diagnostics['persistent'] ?? false;
 }
 
 $constants = [
@@ -80,6 +77,7 @@ $constants = [
     'WP_REDIS_TIMEOUT',
     'WP_REDIS_READ_TIMEOUT',
     'WP_REDIS_RETRY_INTERVAL',
+    'WP_REDIS_PERSISTENT',
     'WP_REDIS_SERVERS',
     'WP_REDIS_CLUSTER',
     'WP_REDIS_SHARDS',

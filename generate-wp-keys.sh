@@ -1,4 +1,5 @@
 #!/bin/bash
+# Prints WordPress keys and salts in .env format.
 
 KEY_NAMES=(
   AUTH_KEY
@@ -12,10 +13,10 @@ KEY_NAMES=(
 )
 
 generate_key() {
-  LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 36
+  LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64
 }
 
 for KEY in "${KEY_NAMES[@]}"; do
   VALUE=$(generate_key)
-  echo "define( '$KEY', '$VALUE' );"
+  echo "WORDPRESS_$KEY=$VALUE"
 done

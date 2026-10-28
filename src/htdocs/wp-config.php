@@ -52,14 +52,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'r|:wU`XQ[=|zZ(L~4UlG+O<csxB>/.fuKa:gS-2ae/kA<X7kznjV6.JY0R%Z!kVp' );
-define( 'SECURE_AUTH_KEY',  'eh@dFL_G5dYTeKoz9Y%-:lFM6]Uq1PzmHOnJQa6;FbU;D{uU&Qh$D3I_^&R0rkso' );
-define( 'LOGGED_IN_KEY',    'zC1e.F&YznO@W2H|KzNx>=o.C5-`9HcXMvX2APkPL1~QMWs|{k~*PqzN8BI5%`$&T' );
-define( 'NONCE_KEY',        'M&V(dW2G~A!y$S]zKbxW`|T!Hw;A4K^X7n3NxR!aQ^A,F(=Tq?5Z$.y7!XHG>#P7' );
-define( 'AUTH_SALT',        'P#Q_N&t}9.{?StfZ1<Q}4(J!7;Jf5+q2Qx7bRsm>DBXEe+t?oeMW&-5tUPN8{,Xo' );
-define( 'SECURE_AUTH_SALT', 'KrXjM8%jXH3zKc`Nb<@Za$|Xr=sE8AhNE`mYGeW#U)#qvAGL<d9KEZ3:bJ8rWvLD' );
-define( 'LOGGED_IN_SALT',   'L|Z$Q6+wBoZ6+@xf3_Hq(3iPY)VhEVS2b@t^F@Swb?U4Z^;eCw6:AHne}Wm7T%(_' );
-define( 'NONCE_SALT',       '8n_?AM)fXt&mvU|h`3TW{GtSEf|4AHc[;@#M^mT-2zktE|Fy^Kmbnd+YGJ.AHpmQ' );
+define( 'AUTH_KEY',         getenv('WORDPRESS_AUTH_KEY') ?: 'put your unique phrase here' );
+define( 'SECURE_AUTH_KEY',  getenv('WORDPRESS_SECURE_AUTH_KEY') ?: 'put your unique phrase here' );
+define( 'LOGGED_IN_KEY',    getenv('WORDPRESS_LOGGED_IN_KEY') ?: 'put your unique phrase here' );
+define( 'NONCE_KEY',        getenv('WORDPRESS_NONCE_KEY') ?: 'put your unique phrase here' );
+define( 'AUTH_SALT',        getenv('WORDPRESS_AUTH_SALT') ?: 'put your unique phrase here' );
+define( 'SECURE_AUTH_SALT', getenv('WORDPRESS_SECURE_AUTH_SALT') ?: 'put your unique phrase here' );
+define( 'LOGGED_IN_SALT',   getenv('WORDPRESS_LOGGED_IN_SALT') ?: 'put your unique phrase here' );
+define( 'NONCE_SALT',       getenv('WORDPRESS_NONCE_SALT') ?: 'put your unique phrase here' );
 
 /**#@-*/
 
@@ -69,7 +69,7 @@ define( 'NONCE_SALT',       '8n_?AM)fXt&mvU|h`3TW{GtSEf|4AHc[;@#M^mT-2zktE|Fy^Km
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = 'wpy_';
+$table_prefix = getenv('WORDPRESS_TABLE_PREFIX') ?: 'wpy_';
 
 /**
  * For developers: WordPress debugging mode.
@@ -86,7 +86,17 @@ $table_prefix = 'wpy_';
 define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
-define( 'WP_REDIS_HOST', (getenv('WORDPRESS_APP_NAME') ?: 'wordpress') . '-redis' ); // Container-Name
+if ( getenv('WORDPRESS_URL') ) {
+	define( 'WP_HOME', getenv('WORDPRESS_URL') );
+	define( 'WP_SITEURL', getenv('WORDPRESS_URL') );
+}
+
+// TLS terminates at the nginx relay in front of the container
+if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+	$_SERVER['HTTPS'] = 'on';
+}
+
+define( 'WP_REDIS_HOST', getenv('WORDPRESS_REDIS_HOST') ?: 'redis' ); // Compose service name
 define( 'WP_REDIS_PORT', getenv('WORDPRESS_REDIS_PORT') ?: '6379' );
 define( 'WP_REDIS_TIMEOUT', 1 );
 define( 'WP_REDIS_READ_TIMEOUT', 1 );

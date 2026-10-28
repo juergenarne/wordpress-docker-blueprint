@@ -1,5 +1,11 @@
 .DS_Store
+.env
+
+msmtprc
+nginx/*.conf
+
 mariadb/data/lib
 mariadb/data/lib/*
 /mariadb/data/lib/aria_log_control
 /mariadb/data/lib/aria_log.00000001
+/mariadb/data/

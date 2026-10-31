@@ -98,6 +98,7 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X
 
 define( 'WP_REDIS_HOST', getenv('WORDPRESS_REDIS_HOST') ?: 'redis' ); // Compose service name
 define( 'WP_REDIS_PORT', getenv('WORDPRESS_REDIS_PORT') ?: '6379' );
+define( 'WP_REDIS_PASSWORD', getenv('WORDPRESS_REDIS_PASSWORD') ?: null );
 define( 'WP_REDIS_TIMEOUT', 1 );
 define( 'WP_REDIS_READ_TIMEOUT', 1 );
 define( 'WP_REDIS_DATABASE', 0 );

@@ -42,6 +42,32 @@ ssh -L 3306:127.0.0.1:<MYSQL_PORT> user@server
 
 Then connect your database client to `127.0.0.1:3306`.
 
+## Migrating an existing site
+
+On the **old server** (classic installation with PHP CLI and database access), copy `old.sh`
+there and run it:
+
+```bash
+sudo ./old.sh /path/to/wordpress
+```
+
+It optionally enables maintenance mode, writes an inventory (versions, plugins, custom
+constants) and creates `~/migration-<domain>-<date>.tar` with the database dump and
+`wp-content` (without caches and backup folders). Copy the archive to the new server.
+
+On the **new server**, after `init.sh` for the same domain:
+
+```bash
+sudo /opt/wordpress/blueprint/new.sh /root/migration-<domain>-<date>.tar
+```
+
+It backs up the fresh installation to `/opt/wordpress/<domain>/backup/<timestamp>/`, imports
+the database with the old table prefix, replaces `wp-content`, updates the database schema,
+rewrites URLs if they changed (e.g. `http://` to `https://`) and enables the Redis cache. The
+logins of the old site apply afterwards.
+
+Test the new server via `/etc/hosts` on your own machine before switching DNS.
+
 ## Local development
 
 ```bash

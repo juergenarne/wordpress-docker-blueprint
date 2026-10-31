@@ -26,6 +26,7 @@ services:
       WORDPRESS_APP_NAME: ${APP_NAME}
       WORDPRESS_REDIS_HOST: redis
       WORDPRESS_REDIS_PORT: 6379
+      WORDPRESS_REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD fehlt in .env}
       WORDPRESS_URL: ${WORDPRESS_URL}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
       WORDPRESS_AUTH_KEY: ${WORDPRESS_AUTH_KEY}
@@ -59,6 +60,16 @@ services:
     image: redis:7
     restart: always
     container_name: ${APP_NAME}-redis
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD fehlt in .env}
+      REDISCLI_AUTH: ${REDIS_PASSWORD}
+    # $$ keeps compose from interpolating; the shell inside the container expands it
+    command: ["sh", "-c", "exec redis-server --requirepass \"$$REDIS_PASSWORD\""]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
     networks:
       - develop-network
 

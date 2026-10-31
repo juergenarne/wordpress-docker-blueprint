@@ -155,6 +155,7 @@ set_env APACHE_PORT            "$APACHE_PORT"
 set_env MYSQL_PORT             "$MYSQL_PORT"
 set_env MYSQL_ROOT_PASSWORD    "$(random_string 32)"
 set_env MYSQL_PASSWORD         "$(random_string 32)"
+set_env REDIS_PASSWORD         "$(random_string 32)"
 set_env WORDPRESS_URL          "https://$DOMAIN"
 set_env WORDPRESS_TABLE_PREFIX "wp_$(random_string 6 | tr 'A-Z' 'a-z')_"
 for key in AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT; do

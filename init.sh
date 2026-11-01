@@ -131,6 +131,12 @@ mkdir -p "$TARGET_DIR"
 if [[ $BLUEPRINT_DIR != "$TARGET_DIR" ]]; then
   rsync -a --exclude=/src/ --exclude=/.env --exclude=/msmtprc --exclude=/mariadb/ \
     --exclude='/nginx/*.conf' --exclude=.DS_Store "$BLUEPRINT_DIR/" "$TARGET_DIR/"
+  # src/ lives in $HTDOCS_DIR: tell git it is left out on purpose, so git pull keeps working
+  if [[ -d $TARGET_DIR/.git ]]; then
+    git -C "$TARGET_DIR" config core.sparseCheckout true
+    printf '/*\n!/src/\n' > "$TARGET_DIR/.git/info/sparse-checkout"
+    git -C "$TARGET_DIR" read-tree -mu HEAD
+  fi
 fi
 chown -R root:root "$TARGET_DIR"
 chmod 750 "$TARGET_DIR"
